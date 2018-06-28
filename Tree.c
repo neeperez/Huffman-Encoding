@@ -12,7 +12,7 @@ typedef struct NodeObj{
 	struct NodeObj* left;
 	struct NodeObj* right;
 	int frequency;
-}NodeObj;
+} NodeObj;
 
 
 Node newNode(char data, int freq){
@@ -52,7 +52,8 @@ void inOrderTreeWalk(Node N){
 		return;
 	}
 	inOrderTreeWalk(N->left);
-	printf("[%c, %d] ", N->character, N->frequency);
+	if(isLeaf(N))
+		printf("[%c, %d] ", N->character, N->frequency);
 	inOrderTreeWalk(N->right);
 }
 
@@ -71,4 +72,12 @@ Node getLeft(Node N){
 
 Node getRight(Node N){
 	return N->right;
+}
+
+char getChar(Node N){
+	return N->character;
+}
+
+int getFreq(Node N){
+	return N->frequency;
 }

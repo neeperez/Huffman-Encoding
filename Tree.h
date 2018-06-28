@@ -15,5 +15,7 @@ void inOrderTreeWalk(Node N);
 void postOrderTreeWalk(Node N);
 Node getLeft(Node N);
 Node getRight(Node N);
+char getChar(Node N);
+int getFreq(Node N);
 
 #endif

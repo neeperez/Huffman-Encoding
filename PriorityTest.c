@@ -1,14 +1,21 @@
 #include "Priority.h"
+#include "Tree.h"
 
 int main(){
 	Priority P = newPriority();
-	add(P, 'a', 100);
+	Node a = newNode('a', 100);
+	Node b = newNode('b', 20);
+	Node c = newNode('c', 70);
+	Node d = newNode('d', 200);
+	Node e = newNode('e', 10);
+
+	add(P, a);
 	printPriority(P);
 	printf("\n");
-	add(P, 'b', 20);
-	add(P, 'c', 70);
-	add(P, 'd', 200);
-	add(P, 'e', 10);
+	add(P, b);
+	add(P, c);
+	add(P, d);
+	add(P, e);
 	printPriority(P);
 	printf("\n");
 }
