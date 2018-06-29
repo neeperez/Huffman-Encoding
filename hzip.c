@@ -28,5 +28,7 @@ int main(){
 	}
 	printf("\n");
 	Node first = del(queue);
-	inOrderTreeWalk(first);
+	char path[100];
+	strcpy(path, "");
+	inOrderTreeWalk(first, path);
 }

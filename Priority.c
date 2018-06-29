@@ -51,7 +51,7 @@ void add(Priority P, Node N){
 		P->size = 1;
 		return;
 	}
-	if(P->head->rank < getFreq(N)){
+	if(P->head->rank > getFreq(N)){
 		Record temp = P->head;
 		P->head = R;
 		R->next = temp;
@@ -61,7 +61,7 @@ void add(Priority P, Node N){
 	Record curr = P->head->next;
 	Record prev = P->head;
 	while(curr != NULL){
-		if(curr->rank < getFreq(N)){
+		if(curr->rank > getFreq(N)){
 			Record temp = curr;
 			prev->next = R;
 			R->next = temp;

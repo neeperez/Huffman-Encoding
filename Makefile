@@ -1,6 +1,6 @@
-BASE_SOURCES = Tree.c Priority.c
-BASE_OBJECTS = Tree.o Priority.o
-HEADERS      = Tree.h Priority.h
+BASE_SOURCES = Tree.c Priority.c Stack.c
+BASE_OBJECTS = Tree.o Priority.o Stack.o
+HEADERS      = Tree.h Priority.h Stack.h
 COMPILE      = gcc -c -g -std=c99 -Wall
 LINK         = gcc -o
 REMOVE       = rm -f
@@ -34,5 +34,11 @@ PriorityTest: PriorityTest.o Priority.o
 PriorityTest.o: Priority.c Priority.h
 	gcc -c -g -std=c99 -Wall PriorityTest.c
 
+StackTest: StackTest.o Stack.o Tree.o
+	$(LINK) StackTest StackTest.o Stack.o Tree.o
+
+StackTest.o: Stack.c Stack.h Tree.h
+	$(COMPILE) StackTest.c
+
 clean:
-	rm -f TreeTest TreeTest.o Tree.o PriorityTest PriorityTest.o Priority hzip hzip.o
+	rm -f StackTest StackTest.o Stack.o TreeTest TreeTest.o Tree.o PriorityTest PriorityTest.o Priority hzip hzip.o

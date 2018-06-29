@@ -11,7 +11,7 @@ int isLeaf(Node N);
 //-----Tree Functions-----
 void setLeft(Node N, Node L);
 void setRight(Node N, Node R);
-void inOrderTreeWalk(Node N);
+void inOrderTreeWalk(Node N, char* prefix);
 void postOrderTreeWalk(Node N);
 Node getLeft(Node N);
 Node getRight(Node N);
