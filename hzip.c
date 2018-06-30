@@ -2,7 +2,8 @@
 #include "Priority.h"
 #include <stdio.h>
 
-int main(){
+int main(int argc, char* argv[]){
+	/*
 	Priority queue = newPriority();
 	Node a = newNode('a', 100);
 	Node b = newNode('b', 20);
@@ -30,5 +31,22 @@ int main(){
 	Node first = del(queue);
 	char path[100];
 	strcpy(path, "");
-	inOrderTreeWalk(first, path);
+	inOrderTreeWalk(first, path);*/
+
+	char* flag;
+	FILE* in;
+	FILE* out;
+	file = calloc(256, sizeof(char));
+
+	if(argc < 2){
+		printf("Too few arguments. Usage: -[flag] in {out}\n");
+		exit(EXIT_FAILURE);
+	}
+	flag = argv[1];
+	in = fopen(argv[2], "r");
+	if(argc == 3){
+		//May need to be modified if we are writing bits
+		out = fopen(argv[3], "w");
+	}
+
 }
