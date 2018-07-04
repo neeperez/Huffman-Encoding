@@ -47,18 +47,22 @@ void setRight(Node N, Node R){
 	N->right = R;
 }
 
-void inOrderTreeWalk(Node N, char* prefix){
+void inOrderTreeWalk(Node N, char* prefix, char** tbl){
 	if(N == NULL){
 		return;
 	}
 	char np[256];
 	strcpy(np, prefix);
-	inOrderTreeWalk(N->left, strcat(np, "0"));
-	if(isLeaf(N))
-		printf("[%c, %s] ", N->character, prefix);
+	inOrderTreeWalk(N->left, strcat(np, "0"), tbl);
+	if(isLeaf(N)){
+		//printf("[%c, %s] ", N->character, prefix);
+		int ichar = N->character;
+		tbl[ichar] = malloc(strlen(prefix) +1);
+		strcpy(tbl[ichar], prefix);
+	}
 	char pp[256];
 	strcpy(pp, prefix);
-	inOrderTreeWalk(N->right, strcat(pp, "1"));
+	inOrderTreeWalk(N->right, strcat(pp, "1"), tbl);
 }
 
 void postOrderTreeWalk(Node N){
