@@ -1,11 +1,16 @@
-BASE_SOURCES = Tree.c Priority.c Stack.c
-BASE_OBJECTS = Tree.o Priority.o Stack.o
-HEADERS      = Tree.h Priority.h Stack.h
+BASE_SOURCES = Tree.c Priority.c Stack.c WriteBits.c
+BASE_OBJECTS = Tree.o Priority.o Stack.o WriteBits.o
+HEADERS      = Tree.h Priority.h Stack.h WriteBits.h
 COMPILE      = gcc -c -g -std=c99 -Wall
 LINK         = gcc -o
 REMOVE       = rm -f
 MEMCHECK     = valgrind --leak-check=full
 
+FileStreamTest: FileStreamTest.o WriteBits.o
+	$(LINK) FileStreamTest FileStreamTest.o WriteBits.o
+
+FileStreamTest.o: FileStreamTest.c WriteBits.h
+	$(COMPILE) FileStreamTest.c
 
 TreeTest: TreeTest.o Tree.o
 	$(LINK) TreeTest TreeTest.o Tree.o
@@ -41,4 +46,4 @@ StackTest.o: Stack.c Stack.h Tree.h
 	$(COMPILE) StackTest.c
 
 clean:
-	rm -f StackTest StackTest.o Stack.o TreeTest TreeTest.o Tree.o PriorityTest PriorityTest.o Priority hzip hzip.o
+	rm -f FileStreamTest FileStreamTest.o WriteBits.o StackTest StackTest.o Stack.o TreeTest TreeTest.o Tree.o PriorityTest PriorityTest.o Priority hzip hzip.o
