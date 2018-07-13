@@ -1,6 +1,6 @@
-BASE_SOURCES = Tree.c Priority.c Stack.c WriteBits.c
-BASE_OBJECTS = Tree.o Priority.o Stack.o WriteBits.o
-HEADERS      = Tree.h Priority.h Stack.h WriteBits.h
+BASE_SOURCES = Tree.c Priority.c Stack.c WriteBits.c ReadBits.c
+BASE_OBJECTS = Tree.o Priority.o Stack.o WriteBits.o ReadBits.o
+HEADERS      = Tree.h Priority.h Stack.h WriteBits.h ReadBits.h
 COMPILE      = gcc -c -g -std=c99 -Wall
 LINK         = gcc -o
 REMOVE       = rm -f
