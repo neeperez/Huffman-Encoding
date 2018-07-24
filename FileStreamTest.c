@@ -21,15 +21,22 @@ int main(int argc, char* argv[]){
 
 	read = fopen(argv[2], "rb");
 	ReadBits myRB = newReadBits(read);
-	printf("%d\n", nextBit(myRB));
-	printf("%d\n", nextBit(myRB));
-	printf("End of file?: %d\n", fileEnd(myRB));
-	printf("%d\n", nextBit(myRB));
+	/*printf("EOF? %d\n", fileEnd(myRB));
 	printf("%d\n", nextBit(myRB));
 	printf("%d\n", nextBit(myRB));
 	printf("%d\n", nextBit(myRB));
 	printf("%d\n", nextBit(myRB));
 	printf("%d\n", nextBit(myRB));
+	printf("%d\n", nextBit(myRB));
+	printf("%d\n", nextBit(myRB));
+	printf("%d\n", nextBit(myRB));*/
+	
+	while(fileEnd(myRB) == 0){
+		int b = nextBit(myRB);
+		if(b != -1)
+			printf("%d\n", b);
+	}
+	fclose(read);
 	return 1;
 
 }
