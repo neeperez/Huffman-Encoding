@@ -6,10 +6,10 @@ LINK         = gcc -o
 REMOVE       = rm -f
 MEMCHECK     = valgrind --leak-check=full
 
-FileStreamTest: FileStreamTest.o WriteBits.o
-	$(LINK) FileStreamTest FileStreamTest.o WriteBits.o
+FileStreamTest: FileStreamTest.o WriteBits.o ReadBits.o
+	$(LINK) FileStreamTest FileStreamTest.o WriteBits.o ReadBits.o
 
-FileStreamTest.o: FileStreamTest.c WriteBits.h
+FileStreamTest.o: FileStreamTest.c WriteBits.h ReadBits.h
 	$(COMPILE) FileStreamTest.c
 
 TreeTest: TreeTest.o Tree.o
@@ -46,4 +46,4 @@ StackTest.o: Stack.c Stack.h Tree.h
 	$(COMPILE) StackTest.c
 
 clean:
-	rm -f FileStreamTest FileStreamTest.o WriteBits.o StackTest StackTest.o Stack.o TreeTest TreeTest.o Tree.o PriorityTest PriorityTest.o Priority hzip hzip.o
+	rm -f FileStreamTest FileStreamTest.o ReadBits.o WriteBits.o StackTest StackTest.o Stack.o TreeTest TreeTest.o Tree.o PriorityTest PriorityTest.o Priority hzip hzip.o
