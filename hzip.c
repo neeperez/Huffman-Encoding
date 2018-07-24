@@ -54,12 +54,17 @@ int main(int argc, char* argv[]){
 	FILE* out;
 	flag = calloc(256, sizeof(char));
 
+	//Check to see how many arguments there are in the commandline
+
+	//If there are less than two arguments, then no flags or files have been
+	//given. Thus, we need to show the user how to correctly use the program
 	if(argc < 2){
 		printf("Too few arguments. Usage: -[flag] in {out}\n");
 		exit(EXIT_FAILURE);
 	}
+
 	flag = argv[1];
-	in = fopen(argv[2], "r");
+
 	if(argc == 3){
 		//May need to be modified if we are writing bits
 		out = fopen(argv[3], "w");
@@ -76,29 +81,27 @@ int main(int argc, char* argv[]){
 		encodeTbl[c] = malloc(strlen("") + 1);
 		strcpy(encodeTbl[c], "");
 	}
-	printf("yeyt");
 
 	if(flag[1] != 'u'){
 		int fchar;
-		printf("Flag is not uncomp.\n");
-		//We want to print out and create the frequency table for the input file
+		//Open the input file regularly; we do not need to read in bits
+		in = fopen(argv[2], "r");
+		//We may want to print out and create the frequency table for the input file
 		for(int n = 0; n < 257; n++){
 			freqTbl[n] = 0;
 		}
+		//Creating character frequency table
 		while(1){
 			char cahr = fgetc(in);
 			if(feof(in))
 				break;
-			printf("%c", cahr);
 			fchar = cahr;
 			freqTbl[fchar]++;
 		}
-		printf("\n");
-		printf("Created freq. tables\n");
-		for(int n = 0; n < 257; n++){
-			printf("%d\n", freqTbl[n]);
-		}
 
+		//We need to create a priority queue to build the encoding tree itself,
+		//using the characters found in the frequency table as a reference
+		//for which characters are included in the file
 		Priority queue = newPriority();
 		int i;
 
@@ -109,8 +112,10 @@ int main(int argc, char* argv[]){
 				add(queue, newNode(c, freqTbl[i]));
 			}
 		}
-		printf("Made priority\n");
-		printPriority(queue);
+
+		//Now we take each top 2 nodes in the queue and combine them 
+		//to create a larger tree; top node is left subtree, second top is
+		//the right subtree
 		while(getSize(queue) > 1){
 			Node left = del(queue);
 			Node right = del(queue);
@@ -120,21 +125,40 @@ int main(int argc, char* argv[]){
 			setRight(parent, right);
 			add(queue, parent);
 		}
-		//Now the queue only has one node: the encoding tree
+		//Once there is only one node in the queue, then we
+		//have now created the encoding tree
 		Node encodeTree = del(queue);
 
-		printf("Acquired tree\n");
+		//Now we need to grab the codes from the tree for each character;
+		//starting from the root and going to the left is the code '0',
+		//going to the right is '1'.
 		char prefix[100];
 		strcpy(prefix, "");
+
+		//Perform a tree walk to store the coded values for each byte
 		inOrderTreeWalk(encodeTree, prefix, encodeTbl);
 		printf("Completed treewalk\n");
 		printf("\n");
-		for (i = 0; i < 257; i++){
-			if(freqTbl[i] == 0) {
-				continue;
+
+		//If the flag is '-t', then display the frequency table of the file's
+		//bytes, in ascii character representation
+		if(flag[1] == 't'){
+			printf("Here is the character frequency table for file %s\n", argv[2]);
+			for (i = 0; i < 257; i++){
+				if(freqTbl[i] == 0) {
+					continue;
+				}
+				char curr = i;
+				printf(" %c    %d     %s\n", curr, freqTbl[i], encodeTbl[i]);
 			}
-			char curr = i;
-			printf(" %c    %d     %s\n", curr, freqTbl[i], encodeTbl[i]);
+		} else if(flag[1] == 'c') { //else, write to a compressed file
+			//We need to have a second file to contain the compressed version
+			//of the original file
+			if(argc < 3){
+				printf("Error: the program needs a file destination\n");
+				exit(EXIT_FAILURE);
+			}
+			
 		}
 	}
 
