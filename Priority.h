@@ -7,7 +7,7 @@ typedef struct RecordObj* Record;
 
 Priority newPriority();
 Record newRecord(Node N);
-char getData(Record R);
+short getData(Record R);
 int getRank(Record  R);
 
 void add(Priority P, Node N);

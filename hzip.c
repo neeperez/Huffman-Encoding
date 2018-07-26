@@ -106,7 +106,7 @@ int main(int argc, char* argv[]){
 		int i;
 
 		for(i = 0; i < 257; i++){
-			char c;
+			short c;
 			if(freqTbl[i] > 0) {
 				c = i;
 				add(queue, newNode(c, freqTbl[i]));
@@ -148,6 +148,7 @@ int main(int argc, char* argv[]){
 				if(freqTbl[i] == 0) {
 					continue;
 				}
+				//add if here for # 256 (EOF)
 				char curr = i;
 				printf(" %c    %d     %s\n", curr, freqTbl[i], encodeTbl[i]);
 			}
@@ -158,7 +159,9 @@ int main(int argc, char* argv[]){
 				printf("Error: the program needs a file destination\n");
 				exit(EXIT_FAILURE);
 			}
-			
+			//Now we need to do a post order traversal of the tree in order
+			//to retrieve the encoded string of chars
+
 		}
 	}
 

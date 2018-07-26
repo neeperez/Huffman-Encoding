@@ -7,7 +7,10 @@
 
 //Define the node structure
 typedef struct NodeObj{
-	char character;
+	short character; //The character needs to be represented as a short;
+					 //This is because we need to know when there is an eof
+					 //which will be represented by 256, a number that needs
+					 //9 bits for representation
 	struct NodeObj* parent;
 	struct NodeObj* left;
 	struct NodeObj* right;
@@ -15,7 +18,7 @@ typedef struct NodeObj{
 } NodeObj;
 
 
-Node newNode(char data, int freq){
+Node newNode(short data, int freq){
 	Node N = NULL;
 	N = malloc(sizeof(NodeObj));
 	N->character = data;
@@ -82,7 +85,7 @@ Node getRight(Node N){
 	return N->right;
 }
 
-char getChar(Node N){
+short getChar(Node N){
 	return N->character;
 }
 

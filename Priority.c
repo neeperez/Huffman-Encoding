@@ -5,7 +5,7 @@
 
 typedef struct RecordObj {
 	int rank;
-	char data;
+	short data;
 	struct RecordObj* next;
 	Node node;
 } RecordObj;
@@ -20,7 +20,7 @@ Record newRecord(Node N){
 	return R;
 }
 
-char getData(Record R){
+short getData(Record R){
 	return R->data;
 }
 

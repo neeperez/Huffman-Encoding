@@ -4,7 +4,7 @@
 typedef struct NodeObj* Node;
 
 //-----Node Functions-----
-Node newNode(char data, int freq);
+Node newNode(short data, int freq);
 void freeNode(Node* ptr);
 int isLeaf(Node N);
 
@@ -15,7 +15,7 @@ void inOrderTreeWalk(Node N, char* prefix, char** tbl);
 void postOrderTreeWalk(Node N);
 Node getLeft(Node N);
 Node getRight(Node N);
-char getChar(Node N);
+short getChar(Node N);
 int getFreq(Node N);
 
 #endif
