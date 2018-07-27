@@ -68,13 +68,47 @@ void inOrderTreeWalk(Node N, char* prefix, char** tbl){
 	inOrderTreeWalk(N->right, strcat(pp, "1"), tbl);
 }
 
-void postOrderTreeWalk(Node N){
+void postOrderTreeWalk(Node N, char* c_code, char* t_code){
 	if(N == NULL){
 		return;
 	}
-	postOrderTreeWalk(N->left);
-	postOrderTreeWalk(N->right);
-	printf("[%c, %d] ", N->character, N->frequency);
+	//IF the node is a leaf, then add 1 to the end of the tree code
+	//and continue the traversal
+	if(!isLeaf(N)){
+		//Hopefully this keeps changes 
+		strcat(t_code, "1");
+	} else {
+		//Since the node is not a leaf, we need to concat the first 
+		//8 bits of the short to the c_code
+		int zero = 1;
+		char byte[10]; 
+		for(int i = 0; i < 8; i++){
+			int curr_bit = (N->character & (1 << i)) >> i;
+			if(curr_bit == 1){
+				zero = 0;
+			}
+			char c_bit = currb + 48; //So we get the ascii rep of the bit
+			byte[i] = c_bit;
+		}
+		//If the byte was all 0s, then we need to distinguish between
+		//null and EOF
+		if(zero == 1){
+			int bit_nine = (N->character & (1 << 8)) >> 8;
+			//1 to indicate EOF, 0 to indicate null
+			if(bit_nine == 1){
+				byte[8] = '1';
+			} else {
+				byte[8] = '0';
+			}
+		}
+		//Clear current char code, add byte to c_code,
+		//add c_code to the end of the t_code, and 
+		strcpy(c_code, "");
+		strcpy(c_code, byte);
+		strcat(t_code, c_code);
+	}
+	postOrderTreeWalk(N->left, c_code, t_code);
+	postOrderTreeWalk(N->right, c_code, t_code);
 }
 
 Node getLeft(Node N){

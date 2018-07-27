@@ -6,6 +6,12 @@ LINK         = gcc -o
 REMOVE       = rm -f
 MEMCHECK     = valgrind --leak-check=full
 
+hzip: hzip.o $(BASE_OBJECTS)
+	$(LINK) hzip hzip.o $(BASE_OBJECTS)
+
+hzip.o: $(BASE_SOURCES) $(HEADERS)
+	$(COMPILE) hzip.c
+
 FileStreamTest: FileStreamTest.o WriteBits.o ReadBits.o
 	$(LINK) FileStreamTest FileStreamTest.o WriteBits.o ReadBits.o
 
@@ -26,12 +32,6 @@ $(BASE_OBJECTS): $(BASE_SOURCES) $(HEADERS)
 
 #Priority.o: Priority.c 
 #	gcc -c -g -std=c99 -Wall Priority.c
-
-hzip: hzip.o $(BASE_OBJECTS)
-	$(LINK) hzip hzip.o $(BASE_OBJECTS)
-
-hzip.o: $(BASE_SOURCES) $(HEADERS)
-	$(COMPILE) hzip.c
 
 PriorityTest: PriorityTest.o Priority.o
 	gcc -o PriorityTest PriorityTest.o Priority.o
