@@ -93,8 +93,10 @@ int main(int argc, char* argv[]){
 		//Creating character frequency table
 		while(1){
 			char cahr = fgetc(in);
-			if(feof(in))
+			if(feof(in)){
+				freqTbl[256] = 1;
 				break;
+			}
 			fchar = cahr;
 			freqTbl[fchar]++;
 		}
@@ -161,7 +163,14 @@ int main(int argc, char* argv[]){
 			}
 			//Now we need to do a post order traversal of the tree in order
 			//to retrieve the encoded string of chars
-
+			char* t_code;
+			t_code = malloc(sizeof(char) * 1000);
+			strcpy(t_code, "");
+			char* c_code;
+			c_code = malloc(sizeof(char) * 100);
+			strcpy(c_code, "");
+			postOrderTreeWalk(encodeTree, c_code, t_code);
+			printf("%s\n", t_code);
 		}
 	}
 

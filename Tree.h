@@ -12,7 +12,7 @@ int isLeaf(Node N);
 void setLeft(Node N, Node L);
 void setRight(Node N, Node R);
 void inOrderTreeWalk(Node N, char* prefix, char** tbl);
-void postOrderTreeWalk(Node N);
+void postOrderTreeWalk(Node N, char* c_code, char* t_code);
 Node getLeft(Node N);
 Node getRight(Node N);
 short getChar(Node N);
