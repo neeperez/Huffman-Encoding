@@ -16,10 +16,22 @@ int main(int argc, char* argv[]){
 	writeBit(myWB, 0);
 	writeBit(myWB, 0);
 	writeBit(myWB, 1);
+	writeBit(myWB, 0);
+	writeBit(myWB, 1);
+	writeBit(myWB, 1);
+	writeBit(myWB, 0);
+	writeBit(myWB, 0);
+	writeBit(myWB, 0);
+	writeBit(myWB, 0);
+	writeBit(myWB, 1);
+	writeBit(myWB, 0);
+	writeBit(myWB, 0);
+	writeBit(myWB, 0);
+	writeBit(myWB, 1);
 	flushByte(myWB);
 	fclose(in);
 
-	read = fopen(argv[2], "rb");
+	/*read = fopen(argv[2], "rb");
 	ReadBits myRB = newReadBits(read);
 	/*printf("EOF? %d\n", fileEnd(myRB));
 	printf("%d\n", nextBit(myRB));
@@ -31,12 +43,12 @@ int main(int argc, char* argv[]){
 	printf("%d\n", nextBit(myRB));
 	printf("%d\n", nextBit(myRB));*/
 	
-	while(fileEnd(myRB) == 0){
+	/*while(fileEnd(myRB) == 0){
 		int b = nextBit(myRB);
 		if(b != -1)
 			printf("%d\n", b);
 	}
-	fclose(read);
+	fclose(read);*/
 	return 1;
 
 }

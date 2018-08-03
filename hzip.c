@@ -2,8 +2,11 @@
 #include <stdlib.h>
 #include "Tree.h"
 #include "Priority.h"
+#include "ReadBits.h"
+#include "WriteBits.h"
 #include <string.h>
 
+void stringToBits(WriteBits wb, char* string); 
 int main(int argc, char* argv[]){
 	/*
 	Priority queue = newPriority();
@@ -100,7 +103,6 @@ int main(int argc, char* argv[]){
 			freqTbl[fchar]++;
 		}
 
-		fclose(in);
 		//We need to create a priority queue to build the encoding tree itself,
 		//using the characters found in the frequency table as a reference
 		//for which characters are included in the file
@@ -163,7 +165,7 @@ int main(int argc, char* argv[]){
 			}
 			//Open the outfile to write the bits 
 			FILE* out;
-			out = fopen("wb", argv[3]);
+			out = fopen(argv[3], "wb");
 			//Now we need to do a post order traversal of the tree in order
 			//to retrieve the encoded string of chars
 			char* t_code;
@@ -183,14 +185,15 @@ int main(int argc, char* argv[]){
 			
 			//Now we need to re-open the file that needs to be compressed
 			//and re-write the file using the encoded version of the bytes
-
-			in = fopen("r", argv[1]);
-
+			rewind(in);
+			printf("Helloooo\n");
 			while(1){
-				char byte = fgetc(in);
-				char* byte_code;
+				printf("Hola\n");
+				short byte = fgetc(in);
+				char* byte_code = malloc(sizeof(char) * 256);
 				if(feof(in)){
 					//Write the eof at the end of the file
+					printf("Found eof\n");
 					strcpy(byte_code, encodeTbl[256]);
 					stringToBits(outfile, byte_code);
 					break;
@@ -199,17 +202,22 @@ int main(int argc, char* argv[]){
 				stringToBits(outfile, byte_code); 
 			}
 
-			//Now we're done compressing, I think.
+			//finally, we need to flush the byte
+			flushByte(outfile);
+			printf("file is written\n");
+			//Now we're done compressing, I think.*/
 		}
 	}
 
 }
 
 void stringToBits(WriteBits wb, char* string){
+	printf("String to bits called\n");
 	int code_len = strlen(string);
 	int code_bit;
 	for(int i = 0; i < code_len; i++){
 		code_bit = string[i] - 48;
 		writeBit(wb, code_bit);
+		printf("Bit written: %d\n", code_bit);
 	}
 }
