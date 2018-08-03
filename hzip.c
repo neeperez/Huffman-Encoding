@@ -51,7 +51,6 @@ int main(int argc, char* argv[]){
 
 	char* flag;
 	FILE* in;
-	FILE* out;
 	flag = calloc(256, sizeof(char));
 
 	//Check to see how many arguments there are in the commandline
@@ -65,10 +64,10 @@ int main(int argc, char* argv[]){
 
 	flag = argv[1];
 
-	if(argc == 3){
+	/*if(argc == 3){
 		//May need to be modified if we are writing bits
 		out = fopen(argv[3], "w");
-	}
+	}*/
 
 	if(flag[1] != 't' && flag[1] != 'u' && flag[1] != 'c'){
 		printf("The flag %s does not exist.", flag);
@@ -101,6 +100,7 @@ int main(int argc, char* argv[]){
 			freqTbl[fchar]++;
 		}
 
+		fclose(in);
 		//We need to create a priority queue to build the encoding tree itself,
 		//using the characters found in the frequency table as a reference
 		//for which characters are included in the file
@@ -157,10 +157,13 @@ int main(int argc, char* argv[]){
 		} else if(flag[1] == 'c') { //else, write to a compressed file
 			//We need to have a second file to contain the compressed version
 			//of the original file
-			if(argc < 3){
+			if(argc < 4){
 				printf("Error: the program needs a file destination\n");
 				exit(EXIT_FAILURE);
 			}
+			//Open the outfile to write the bits 
+			FILE* out;
+			out = fopen("wb", argv[3]);
 			//Now we need to do a post order traversal of the tree in order
 			//to retrieve the encoded string of chars
 			char* t_code;
@@ -171,7 +174,42 @@ int main(int argc, char* argv[]){
 			strcpy(c_code, "");
 			postOrderTreeWalk(encodeTree, c_code, t_code);
 			printf("%s\n", t_code);
+
+			//Now that we have the encoded string, we need to convert
+			//the string into bit representation and write it into
+			//the outfile.
+			WriteBits outfile = newWriteBits(out);
+			stringToBits(outfile, t_code);
+			
+			//Now we need to re-open the file that needs to be compressed
+			//and re-write the file using the encoded version of the bytes
+
+			in = fopen("r", argv[1]);
+
+			while(1){
+				char byte = fgetc(in);
+				char* byte_code;
+				if(feof(in)){
+					//Write the eof at the end of the file
+					strcpy(byte_code, encodeTbl[256]);
+					stringToBits(outfile, byte_code);
+					break;
+				}			
+				strcpy(byte_code, encodeTbl[byte]);
+				stringToBits(outfile, byte_code); 
+			}
+
+			//Now we're done compressing, I think.
 		}
 	}
 
+}
+
+void stringToBits(WriteBits wb, char* string){
+	int code_len = strlen(string);
+	int code_bit;
+	for(int i = 0; i < code_len; i++){
+		code_bit = string[i] - 48;
+		writeBit(wb, code_bit);
+	}
 }
