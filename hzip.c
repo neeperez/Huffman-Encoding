@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "Tree.h"
 #include "Priority.h"
+#include "Stack.h"
 #include "ReadBits.h"
 #include "WriteBits.h"
 #include <string.h>
@@ -205,8 +206,58 @@ int main(int argc, char* argv[]){
 			//finally, we need to flush the byte
 			flushByte(outfile);
 			printf("file is written\n");
-			//Now we're done compressing, I think.*/
+			//Now we're done compressing, I think.
+		} 
+	} else {
+		//Uncompress the file
+		if(argc != 4){
+			printf("Error: please enter in a destintion file.\n");
+			exit(EXIT_FAILURE);
 		}
+		FILE* out = fopen(argv[3], "wb");
+		in = fopen(argv[2], "rb");
+
+		ReadBits infile = newReadBits(in);
+		Stack decomp_stack = newStack();
+
+		int bit;
+		while(1){
+			bit = nextBit(infile);
+			//IF the bit  is 0, then we've hit a leaf.
+			if(bit == 0){
+				//Read the next 8 bits, and construct a byte out of it
+				short byte = 0;
+				for(int i = 7; i >= 0; i--){
+					bit = nextBit(infile);
+					byte |= bit << i;
+				}
+				//Check to see if we have ran into a null character or eof
+				if(byte == 0){
+					bit = nextBit(infile);
+					if(bit == 1){
+						//There's an eof
+						push(decomp_stack, newNode(256, 0));
+					} else {
+						push(decomp_stack, newNode(0,0));
+					}
+				} else {
+					push(decomp_stack, newNode(byte, 0));
+				}
+			} else {
+				//Otherwise, build the tree
+				Node left = pop(decomp_stack);
+				Node right = pop(decomp_stack);
+				Node parent = newNode(getChar(left), 0);
+				setLeft(parent, left);
+				setRight(parent, right);
+				push(decomp_stack, parent);
+				if(getStackSize(decomp_stack) == 1){
+					break;
+				}
+			}
+		}
+
+
 	}
 
 }

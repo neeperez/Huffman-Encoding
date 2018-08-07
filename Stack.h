@@ -14,5 +14,5 @@ void push(Stack S, Node N);
 Node pop(Stack S);
 int isEmpty(Stack S);
 void printStack(Stack S);
-
+int getStackSize(Stack S);
 #endif
