@@ -218,8 +218,9 @@ int main(int argc, char* argv[]){
 		in = fopen(argv[2], "rb");
 
 		ReadBits infile = newReadBits(in);
+		WriteBits outfile = newWriteBits(out);
 		Stack decomp_stack = newStack();
-
+		Node htree;
 		int bit;
 		while(1){
 			bit = nextBit(infile);
@@ -245,6 +246,7 @@ int main(int argc, char* argv[]){
 				}
 			} else {
 				//Otherwise, build the tree
+				printf("Pop\n");
 				Node left = pop(decomp_stack);
 				Node right = pop(decomp_stack);
 				Node parent = newNode(getChar(left), 0);
@@ -252,16 +254,65 @@ int main(int argc, char* argv[]){
 				setRight(parent, right);
 				push(decomp_stack, parent);
 				if(getStackSize(decomp_stack) == 1){
+					htree = pop(decomp_stack);
 					break;
 				}
 			}
 		}
 
+		printf("Tree built\n");		
+		printf("%d\n", getChar(htree));
+
+		Node nodeptr;
+		nodeptr = htree;
+		printf("%d\n", getChar(nodeptr));
+		while(1){
+			bit = nextBit(infile);
+			if(bit == 0){
+				nodeptr = getRight(nodeptr);
+				printf("%d\n", getChar(htree));
+				printf("%d\n", getChar(nodeptr));
+				if(isLeaf(nodeptr)){
+					short byte = getChar(nodeptr);
+					if(byte == 256){
+						break;
+					}
+					for(int i = 7; i >= 0; i--){
+						int ind_bit = ((1 << i) & byte) >> i;
+						writeBit(outfile, ind_bit);
+					}
+					nodeptr = htree;
+				} else {
+					continue;
+				}
+			} else {
+				nodeptr = getLeft(nodeptr);
+				if(isLeaf(nodeptr)){
+					short byte = getChar(nodeptr);
+					if(byte == 256){
+						break;
+					}
+					for(int i = 7; i >= 0; i--){
+						int ind_bit = ((1 << i) & byte) >> i;
+						writeBit(outfile, ind_bit);
+					}
+					nodeptr = htree;
+				} else {
+					continue;
+				}
+
+			}
+		}
+
+		flushByte(outfile);
+		fclose(out);
 
 	}
 
 }
 
+// This takes a string of characters that are either 1s or 0s and writes them as 
+// bits into the Write Bits object file
 void stringToBits(WriteBits wb, char* string){
 	printf("String to bits called\n");
 	int code_len = strlen(string);
